@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 class Jogador
@@ -41,6 +41,10 @@ class Program
             Console.WriteLine("CAMPEONATO FUT 7");
             Console.WriteLine("1 - Cadastrar time");
             Console.WriteLine("2 - Cadastrar jogador");
+            Console.WriteLine("3 - Listar times");
+            Console.WriteLine("4 - Listar jogadores");
+            Console.WriteLine("5 - Buscar time");
+            Console.WriteLine("6 - Registrar vitória");
             Console.WriteLine("0 - Sair");
             Console.Write("Escolha uma opção: ");
 
@@ -135,9 +139,118 @@ class Program
                 }
             }
 
+            else if (opcao == 3)
+            {
+                Console.WriteLine();
+                Console.WriteLine("TIMES CADASTRADOS");
+
+                foreach (Time time in times)
+                {
+                    Console.WriteLine(
+                        time.Nome + " - " +
+                        time.Pontos + " pontos"
+                    );
+                }
+            }
+
+            else if (opcao == 4)
+            {
+                Console.Write("Nome do time: ");
+                string nomeTime = Console.ReadLine();
+
+                bool encontrouTime = false;
+
+                foreach (Time time in times)
+                {
+                    if (time.Nome == nomeTime)
+                    {
+                        encontrouTime = true;
+
+                        Console.WriteLine();
+                        Console.WriteLine(
+                            "Jogadores do " + time.Nome
+                        );
+
+                        foreach (Jogador jogador in time.Jogadores)
+                        {
+                            Console.WriteLine(
+                                jogador.Numero + " - " +
+                                jogador.Nome
+                            );
+                        }
+                    }
+                }
+
+                if (encontrouTime == false)
+                {
+                    Console.WriteLine("Time não encontrado.");
+                }
+            }
+
+            else if (opcao == 5)
+            {
+                Console.Write("Nome do time: ");
+                string nomeTime = Console.ReadLine();
+
+                bool encontrou = false;
+
+                foreach (Time time in times)
+                {
+                    if (time.Nome == nomeTime)
+                    {
+                        encontrou = true;
+
+                        Console.WriteLine(
+                            "Time: " + time.Nome
+                        );
+
+                        Console.WriteLine(
+                            "Pontos: " + time.Pontos
+                        );
+                    }
+                }
+
+                if (encontrou == false)
+                {
+                    Console.WriteLine("Time não encontrado.");
+                }
+            }
+
+            else if (opcao == 6)
+            {
+                Console.Write("Nome do time vencedor: ");
+                string nomeTime = Console.ReadLine();
+
+                bool encontrou = false;
+
+                foreach (Time time in times)
+                {
+                    if (time.Nome == nomeTime)
+                    {
+                        encontrou = true;
+
+                        time.Pontos += 3;
+
+                        Console.WriteLine(
+                            "Vitória registrada."
+                        );
+                    }
+                }
+
+                if (encontrou == false)
+                {
+                    Console.WriteLine("Time não encontrado.");
+                }
+            }
+
             else if (opcao == 0)
             {
                 Console.WriteLine("Programa encerrado.");
+            }
+
+            else
+            {
+                Console.WriteLine("Opção inválida.");
             }
         }
     }
