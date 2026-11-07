@@ -1,0 +1,174 @@
+### Roteiro de demonstração - Campeonato Fut7
+### Funciona no Visual Studio 2022 e no VS Code (extensão "REST Client").
+### Suba a API antes (dotnet run) e comece com o banco vazio (apague campeonato.db).
+### Os ids usados abaixo (1 = Flamengo, 2 = Vasco) valem para um banco recém-criado.
+
+@baseUrl = http://localhost:5080
+
+### 1. UC01 - Cadastrar times
+POST {{baseUrl}}/api/times
+Content-Type: application/json
+
+{ "nome": "Flamengo" }
+
+###
+POST {{baseUrl}}/api/times
+Content-Type: application/json
+
+{ "nome": "Vasco" }
+
+### 2. UC01 - Time duplicado (esperado 409)
+POST {{baseUrl}}/api/times
+Content-Type: application/json
+
+{ "nome": "flamengo" }
+
+### 3. UC06 - Partida sem elenco minimo (esperado 409, RN05)
+POST {{baseUrl}}/api/partidas
+Content-Type: application/json
+
+{ "timeCasaId": 1, "timeVisitanteId": 2, "golsCasa": 3, "golsVisitante": 1 }
+
+### 4. UC04 - Cadastrar 7 jogadores do Flamengo
+POST {{baseUrl}}/api/times/1/jogadores
+Content-Type: application/json
+
+{ "nome": "Carlos", "numero": 1 }
+
+###
+POST {{baseUrl}}/api/times/1/jogadores
+Content-Type: application/json
+
+{ "nome": "Bruno", "numero": 2 }
+
+###
+POST {{baseUrl}}/api/times/1/jogadores
+Content-Type: application/json
+
+{ "nome": "Diego", "numero": 3 }
+
+###
+POST {{baseUrl}}/api/times/1/jogadores
+Content-Type: application/json
+
+{ "nome": "Eduardo", "numero": 4 }
+
+###
+POST {{baseUrl}}/api/times/1/jogadores
+Content-Type: application/json
+
+{ "nome": "Felipe", "numero": 5 }
+
+###
+POST {{baseUrl}}/api/times/1/jogadores
+Content-Type: application/json
+
+{ "nome": "Gustavo", "numero": 6 }
+
+###
+POST {{baseUrl}}/api/times/1/jogadores
+Content-Type: application/json
+
+{ "nome": "Henrique", "numero": 7 }
+
+### 4. UC04 - Cadastrar 7 jogadores do Vasco
+POST {{baseUrl}}/api/times/2/jogadores
+Content-Type: application/json
+
+{ "nome": "Igor", "numero": 1 }
+
+###
+POST {{baseUrl}}/api/times/2/jogadores
+Content-Type: application/json
+
+{ "nome": "Joao", "numero": 2 }
+
+###
+POST {{baseUrl}}/api/times/2/jogadores
+Content-Type: application/json
+
+{ "nome": "Lucas", "numero": 3 }
+
+###
+POST {{baseUrl}}/api/times/2/jogadores
+Content-Type: application/json
+
+{ "nome": "Marcos", "numero": 4 }
+
+###
+POST {{baseUrl}}/api/times/2/jogadores
+Content-Type: application/json
+
+{ "nome": "Nicolas", "numero": 5 }
+
+###
+POST {{baseUrl}}/api/times/2/jogadores
+Content-Type: application/json
+
+{ "nome": "Otavio", "numero": 6 }
+
+###
+POST {{baseUrl}}/api/times/2/jogadores
+Content-Type: application/json
+
+{ "nome": "Pedro", "numero": 7 }
+
+### 5. UC04 - Nome repetido no time (esperado 409, RN02)
+POST {{baseUrl}}/api/times/1/jogadores
+Content-Type: application/json
+
+{ "nome": "carlos", "numero": 10 }
+
+### 5. UC04 - Numero de camisa repetido (esperado 409, RN03)
+POST {{baseUrl}}/api/times/1/jogadores
+Content-Type: application/json
+
+{ "nome": "Rafael", "numero": 3 }
+
+### 6. UC05 - Listar jogadores do Flamengo
+GET {{baseUrl}}/api/times/1/jogadores
+
+### 6. UC02 - Listar times
+GET {{baseUrl}}/api/times
+
+### 7. UC03 - Buscar time pelo nome
+GET {{baseUrl}}/api/times/buscar?nome=fla
+
+### 8. UC06 - Registrar partidas
+POST {{baseUrl}}/api/partidas
+Content-Type: application/json
+
+{ "timeCasaId": 1, "timeVisitanteId": 2, "golsCasa": 3, "golsVisitante": 1 }
+
+###
+POST {{baseUrl}}/api/partidas
+Content-Type: application/json
+
+{ "timeCasaId": 2, "timeVisitanteId": 1, "golsCasa": 2, "golsVisitante": 2 }
+
+###
+POST {{baseUrl}}/api/partidas
+Content-Type: application/json
+
+{ "timeCasaId": 2, "timeVisitanteId": 1, "golsCasa": 1, "golsVisitante": 0 }
+
+### 8. UC06 - Time contra ele mesmo (esperado 400, RN06)
+POST {{baseUrl}}/api/partidas
+Content-Type: application/json
+
+{ "timeCasaId": 1, "timeVisitanteId": 1, "golsCasa": 1, "golsVisitante": 0 }
+
+### 8. UC07 - Listar partidas
+GET {{baseUrl}}/api/partidas
+
+### 9. UC08 - Classificacao (Flamengo 1o e Vasco 2o: 4 pontos, desempate por saldo de gols)
+GET {{baseUrl}}/api/classificacao
+
+### 10. UC12 - Anular a ultima partida (id 3) e recalcular a classificacao
+DELETE {{baseUrl}}/api/partidas/3
+
+###
+GET {{baseUrl}}/api/classificacao
+
+### 11. UC10 - Remover time que ja jogou (esperado 409, RN09)
+DELETE {{baseUrl}}/api/times/1
